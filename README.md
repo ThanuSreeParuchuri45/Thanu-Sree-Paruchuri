@@ -1,74 +1,64 @@
-# Class Size and Software Maintainability Study
+# CK Metrics Tool Setup
 
-An empirical investigation into the effect of class size (measured in Lines of Code, LoC) on software maintainability in Java projects using CK metrics.
+This directory contains instructions for setting up and using the CK metrics tool for Java code analysis.
 
-## Overview
+## About CK
 
-This repository contains the data, analysis, and findings from our empirical study examining the relationship between Java class size and maintainability metrics. We analyzed five popular Java projects on GitHub using the CK metrics tool to measure complexity (WMC) and coupling (CBO) in relation to class size.
+CK is a tool for calculating class-level software metrics in Java projects. It calculates the following metrics:
 
-## Key Findings
+- Lines of Code (LOC)
+- Weighted Methods per Class (WMC)
+- Depth of Inheritance Tree (DIT)
+- Number of Children (NOC)
+- Coupling Between Objects (CBO)
+- Response for a Class (RFC)
+- Lack of Cohesion of Methods (LCOM)
 
-- Strong positive correlation between class size (LoC) and complexity (WMC) across all projects (r = 0.65-0.82)
-- Moderate positive correlation between class size and coupling (CBO) across all projects (r = 0.53-0.67)
-- 80% of classes with LoC > 500 had WMC > 30 and CBO > 15, indicating reduced maintainability
-- Larger classes consistently showed poorer maintainability characteristics
+## Installation
 
-## Repository Structure
+1. Download the latest release of CK from the official repository:
+   https://github.com/mauricioaniche/ck/releases
 
-- `/data`: Raw and processed metrics from the analyzed projects
-- `/src`: Analysis scripts and data processing code
-- `/report`: Full empirical study report and figures
-- `/tools`: Instructions and scripts for the CK metrics tool
+2. Save the downloaded JAR file as `ck.jar` in this directory.
 
-## Getting Started
+## Usage
 
-### Prerequisites
+### Using the Provided Script
 
-- Java 8 or higher
-- Python 3.7 or higher
-- Required Python packages: pandas, matplotlib, seaborn, numpy
+We've provided a convenient script to run CK on Java projects:
 
-### Setup
-
-1. Clone the repository:
-```
-git clone https://github.com/yourusername/class-size-maintainability.git
-cd class-size-maintainability
+```bash
+bash ../../src/data_collection/collect_metrics.sh  
 ```
 
-2. Install Python dependencies:
-```
-pip install -r requirements.txt
-```
+### Manual Usage
 
-3. Download the CK metrics tool following instructions in `/tools/ck-tool/README.md`
+Alternatively, you can run CK directly:
 
-### Running the Analysis
-
-1. Collect metrics from a Java project:
-```
-bash src/data_collection/collect_metrics.sh <path-to-java-project> <output-directory>
+```bash
+java -jar ck.jar  true 0 false /-metrics.csv
 ```
 
-2. Analyze the metrics and generate visualizations:
-```
-python src/analysis/analyze_metrics.py --input data/raw/ --output data/processed/
-python src/visualization/generate_plots.py --input data/processed/ --output report/figures/
-```
+Parameters:
+- `<path-to-java-project>`: Path to the Java project
+- `true`: Use JDT AST for parsing
+- `0`: Maximum files to parse (0 = unlimited)
+- `false`: Disable metrics calculation for inner classes
+- `<output-directory>/<project-name>-metrics.csv`: Output file path
 
-## Projects Analyzed
+## Output Format
 
-1. **Snailclimb/JavaGuide** - Java learning guide (153,206 LoC)
-2. **iluwatar/java-design-patterns** - Design patterns in Java (28,281 LoC)
-3. **doocs/advanced-java** - Java interview guide (29,161 LoC) 
-4. **macrozheng/mall** - E-commerce system (57,643 LoC)
-5. **spring-projects/spring-boot** - Spring Boot framework (151,778 LoC)
+The tool generates a CSV file with the following columns:
 
-## Contributors
+- `file`: Java file path
+- `class`: Full class name
+- `type`: Class type (class or interface)
+- `loc`: Lines of code
+- `wmc`: Weighted methods per class
+- `cbo`: Coupling between objects
+- And other CK metrics
 
-- [Your Name]
-- [Team Member Names]
+## References
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.s
+- CK GitHub Repository: https://github.com/mauricioaniche/ck
+- Original CK Metrics Paper: Chidamber, S. R., & Kemerer, C. F. (1994). A Metrics Suite for Object-Oriented Design. IEEE Transactions on Software Engineering.
